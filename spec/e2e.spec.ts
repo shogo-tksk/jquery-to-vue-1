@@ -1,4 +1,4 @@
-const path = require("path");
+import path from "path";
 
 describe("TODOアプリ", () => {
     beforeEach(async () => {
@@ -54,5 +54,25 @@ describe("TODOアプリ", () => {
             "#todoCount", {text: "(全2件)"}
         );
     });
+
+    //testcase4
+    it("タスクの削除", async () => {
+        await page.click("#addTodo");
+        await page.click("#addTodo");
+        await page.type(".todo:nth-child(1) input", "サンプルタスク1");
+        await page.type(".todo:nth-child(2) input", "サンプルタスク2");
+        await page.click(".todo:nth-child(1) .delete");
+        await expect(page).toMatchElement(
+            "#nextTodo", {text: "次のTODO: サンプルタスク2"}
+        );
+
+        await page.click(".todo:nth-child(1) .delete");
+        await page.waitForSelector("#todoList", {visible: false})
+        await page.waitForSelector("#todoEmpty", {visible: true})
+        await expect(page).toMatchElement(
+            "#todoCount", {text: "(全0件)"}
+        );
+    });
+
 });
 
